@@ -1131,7 +1131,14 @@ class Source(Dashboard.Module):
         self.offset = 0
 
     def label(self):
-        return 'Source'
+        result = 'Source'
+        if 0 < self.show_name and None is not self.file_name and 0 < len(self.file_name):
+            result += ' - '
+            if (1 == self.show_name):
+                result += os.path.basename(self.file_name)
+            else:
+                result += self.file_name
+        return result
 
     def lines(self, term_width, term_height, style_changed):
         # skip if the current thread is not stopped
@@ -1256,6 +1263,13 @@ A value of 0 uses the whole height.''',
                 'name': 'tab_size',
                 'type': int,
                 'check': check_gt_zero
+            },
+            'show-name': {
+                'doc': 'Show the file name in the separator (0 = off, 1 = file name, 2 = full path).',
+                'default': 0,
+                'name': 'show_name',
+                'type': int,
+                'check': check_ge_zero
             }
         }
 
